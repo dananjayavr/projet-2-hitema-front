@@ -21,31 +21,35 @@ $(document).ready(() => {
         '18':['25px','1725px'],
     };
 
-    /*let x = 25;
-
-    for(let i = 1; i<$('.square').length;i++) {
-        if(x<=1800) {
-            $(`#${i}`).css({
-                'background-image':'url(assets/cards.png)',
-                'background-position':`30px ${x}px`,
-            });
-            x+=100;
+    // Helper functions
+    function shuffle(a) {
+        let j, x, i;
+        for (i = a.length - 1; i > 0; i--) {
+            j = Math.floor(Math.random() * (i + 1));
+            x = a[i];
+            a[i] = a[j];
+            a[j] = x;
         }
-    }*/
-
-    let x = 25;
-    for(let i = 1; i<$('.square').length;i++) {
-        if(x<=1800) {
-            $(`#${i}`).css({
-                'background-image':'url(assets/cards.png)',
-                'background-position': mapFruit['1'].join(' ')
-            });
-            x+=100;
-        }
+        return a;
     }
 
-    for (let [key, value] of Object.entries(mapFruit)) {
-        console.log(key, value);
+    let maxNum = 19;
+    let arr = Array(maxNum).fill().map((e,i)=>i+1);
+    arr.sort(function() {
+        return .5 - Math.random();
+    });
+
+
+    let fruits1  = shuffle(arr.slice(1,12));
+    let fruits2  = shuffle(arr.slice(1,12));
+    let gameBoard = fruits1.concat(fruits2);
+
+
+    for(let i = 1; i<gameBoard.length;i++) {
+        $(`#${i}`).css({
+            'background':'linear-gradient(rgba(187, 164 ,164 , 0.9), rgba(187, 164 ,164 , 0.9)), url(assets/cards.png)',
+            'background-position': mapFruit[`${gameBoard[i]}`].join(' '),
+        });
     }
-    //console.log(mapFruit['m'].join(' '))
+
 });
