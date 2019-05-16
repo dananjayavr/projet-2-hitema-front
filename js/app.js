@@ -1,5 +1,5 @@
+let matchCount = 0;
 $(document).ready(() => {
-
     let mapFruit = {
         '1':['25px','25px'],
         '2':['25px','125px'],
@@ -21,6 +21,7 @@ $(document).ready(() => {
         '18':['25px','1725px'],
     };
 
+
     // Helper functions
     function shuffle(a) {
         let j, x, i;
@@ -32,6 +33,12 @@ $(document).ready(() => {
         }
         return a;
     }
+
+    function timer() {
+        $('.progress-bar').attr('aria-valuenow',90);
+    }
+
+    timer();
 
     let maxNum = 19;
     let arr = Array(maxNum).fill().map((e,i)=>i+1);
@@ -47,9 +54,44 @@ $(document).ready(() => {
 
     for(let i = 1; i<gameBoard.length;i++) {
         $(`#${i}`).css({
-            'background':'linear-gradient(rgba(187, 164 ,164 , 0.9), rgba(187, 164 ,164 , 0.9)), url(assets/cards.png)',
-            'background-position': mapFruit[`${gameBoard[i]}`].join(' '),
+            'background-image':'linear-gradient(rgba(187, 164 ,164 , 0.9), rgba(187, 164 ,164 , 0.9)), url(assets/cards.png)',
+            'background-position': mapFruit[`${gameBoard[i]}`].join(' ')
         });
     }
+    let matcher  = [];
+    matchCount = 0;
 
-});
+    //$('.square').css({'border-top':'50px'});
+    $('.square').bind('click',(function(e) {
+        let initialPos = $(this).css('background-position');
+        matcher.push($(this));
+        $(this).css({
+          'background-image':'url(assets/cards.png)',
+          'background-position':initialPos
+       });
+        $(this).addClass('select');
+        console.log(matcher);
+        if(matcher.length===2) {
+            if(matcher[0].css('background-position')===matcher[1].css('background-position')) {
+                console.log('Match!');
+                matchCount++;
+                //$(this).addClass('match');
+                matcher[0].addClass('match');
+                matcher[1].addClass('match');
+            } else {
+                console.log('No Match!');
+                $(this).addClass('select');
+                function hide() {
+                    $('.select:not(.match)').css({
+                        'background-image': 'linear-gradient(rgba(187, 164 ,164 , 0.9), rgba(187, 164 ,164 , 0.9)), url(assets/cards.png)'
+                    });
+                }
+                setTimeout(hide,1000);
+            }
+        }
+        if(matcher.length>=2) {matcher.length=0;}
+    }));
+},setTimeout(() => {
+    alert(`Game Over! Your score: ${matchCount}`);
+    location.reload();
+},60000));
