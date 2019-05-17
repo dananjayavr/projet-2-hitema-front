@@ -1,4 +1,8 @@
 let matchCount = 0;
+let gamer = "";
+let leaders = JSON.stringify(localStorage);
+let jsonLeaders = JSON.parse(leaders);
+
 function game() {
     let mapFruit = {
         '1':['25px','25px'],
@@ -55,7 +59,7 @@ function game() {
     matchCount = 0;
 
     //$('.square').css({'border-top':'50px'});
-    $('.square').bind('click',(function(e) {
+    $('.square').click( function(e) {
         let initialPos = $(this).css('background-position');
         matcher.push($(this));
         $(this).css({
@@ -75,11 +79,11 @@ function game() {
                         'background-image': 'linear-gradient(rgba(187, 164 ,164 , 1), rgba(187, 164 ,164 , 1)), url(assets/cards.png)'
                     });
                 }
-                setTimeout(hide,1000);
+                setTimeout(hide,300);
             }
         }
         if(matcher.length>=2) {matcher.length=0;}
-    }));
+    });
 }
 function countdown() {
     let i = 100;
@@ -92,18 +96,26 @@ function countdown() {
             clearInterval(counterBack);
         }
 
-    }, 565);
+    }, 500);
 }
 
 
 $(document).ready(() => {
     $('#start').click(() => {
+        gamer = prompt('Enter your name: ');
+        $('#start').css('display','none');
         game();
         countdown();
-    })
+    });
+    let x = 0;
+    $.each(jsonLeaders,(key,value) => {
+        $('ul').append('<li>'+key+' : '+value);
+    });
 },setTimeout(() => {
     alert(`Game Over! Your score: ${matchCount}`);
-    $('#start').css('display','none');
+    if(!localStorage.getItem(gamer)) {
+        localStorage.setItem(gamer,matchCount);
+    }
     $('.control').html('<h2>Refresh to Restart</h2>');
 },60000));
 
@@ -111,3 +123,4 @@ $(document).ready(() => {
 $(document).ready(() => {game()},setTimeout(() => {
     alert(`Game Over! Your score: ${matchCount}`);
 },60000));*/
+
