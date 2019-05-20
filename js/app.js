@@ -1,3 +1,4 @@
+// Initialisation des variables globaux
 let matchCount = 0;
 let gamer = "";
 let leaders = JSON.stringify(localStorage);
@@ -25,7 +26,7 @@ function game() {
         '18':['25px','1725px'],
     };
 
-    // Helper functions
+    // Fonction shuffle (pour les cartes)
     function shuffle(a) {
         let j, x, i;
         for (i = a.length - 1; i > 0; i--) {
@@ -37,17 +38,16 @@ function game() {
         return a;
     }
 
+    // Répartition des cartes
     let maxNum = 19;
     let arr = Array(maxNum).fill().map((e,i)=>i+1);
     arr.sort(function() {
         return .5 - Math.random();
     });
 
-
     let fruits1  = shuffle(arr.slice(1,12));
     let fruits2  = shuffle(arr.slice(1,12));
     let gameBoard = fruits1.concat(fruits2);
-
 
     for(let i = 1; i<gameBoard.length;i++) {
         $(`#${i}`).css({
@@ -87,7 +87,6 @@ function game() {
 }
 function countdown() {
     let i = 100;
-
     let counterBack = setInterval(function(){
         i--;
         if (i > 0){
@@ -95,10 +94,8 @@ function countdown() {
         } else {
             clearInterval(counterBack);
         }
-
     }, 500);
 }
-
 
 $(document).ready(() => {
     $('#start').click(() => {
@@ -107,20 +104,23 @@ $(document).ready(() => {
         game();
         countdown();
     });
-    let x = 0;
+   /*$('#start').click(() => {
+        //countdown();
+    });*/
+
     $.each(jsonLeaders,(key,value) => {
         $('ul').append('<li>'+key+' : '+value);
     });
-},setTimeout(() => {
+},setInterval(() => {
     alert(`Game Over! Your score: ${matchCount}`);
-    if(!localStorage.getItem(gamer)) {
+    if(!localStorage.getItem(gamer) && matchCount > 0) {
         localStorage.setItem(gamer,matchCount);
     }
-    $('.control').html('<h2>Refresh to Restart</h2>');
+    //$('.control').html('<h2>Refresh to Restart</h2>');
+    location.reload();
 },60000));
 
 /*
 $(document).ready(() => {game()},setTimeout(() => {
     alert(`Game Over! Your score: ${matchCount}`);
 },60000));*/
-
